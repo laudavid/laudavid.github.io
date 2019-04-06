@@ -7,7 +7,7 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>Hexo</title>
+  <title>LightLDA配置文档 | Hexo</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -15,19 +15,19 @@
     <meta name="keywords" content="前端,设计,前端开发,用户体验,设计,frontend,design,nodejs,JavaScript">
   
 
-  <meta name="description" content="LightLDA配置文档一、配置机器介绍IP：101.200.39.143 操作系统：Ubuntu 18.04.2 LTS 64位 gcc版本：gcc (Ubuntu 7.3.0-27ubuntu1~18.04) 7.3.0 python版本：Python 2.7.15rc1 二、依赖工具安装安装之前需要先安装版本控制工具git： 1sudo apt update &amp;amp;&amp;amp; sudo">
+  <meta name="description" content="一、配置机器介绍IP：101.200.39.143 操作系统：Ubuntu 18.04.2 LTS 64位 gcc版本：gcc (Ubuntu 7.3.0-27ubuntu1~18.04) 7.3.0 python版本：Python 2.7.15rc1 二、依赖工具安装安装之前需要先安装版本控制工具git： 1sudo apt update &amp;amp;&amp;amp; sudo apt install">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo">
+<meta property="og:title" content="LightLDA配置文档">
 <meta property="og:url" content="http://yoursite.com/2019/04/07/LightLDA配置文档/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="LightLDA配置文档一、配置机器介绍IP：101.200.39.143 操作系统：Ubuntu 18.04.2 LTS 64位 gcc版本：gcc (Ubuntu 7.3.0-27ubuntu1~18.04) 7.3.0 python版本：Python 2.7.15rc1 二、依赖工具安装安装之前需要先安装版本控制工具git： 1sudo apt update &amp;amp;&amp;amp; sudo">
+<meta property="og:description" content="一、配置机器介绍IP：101.200.39.143 操作系统：Ubuntu 18.04.2 LTS 64位 gcc版本：gcc (Ubuntu 7.3.0-27ubuntu1~18.04) 7.3.0 python版本：Python 2.7.15rc1 二、依赖工具安装安装之前需要先安装版本控制工具git： 1sudo apt update &amp;amp;&amp;amp; sudo apt install">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2019/04/07/LightLDA配置文档/LightLDA配置文档/1554056398420.png">
 <meta property="og:image" content="http://yoursite.com/2019/04/07/LightLDA配置文档/LightLDA配置文档/20190401030929.png">
-<meta property="og:updated_time" content="2019-04-03T05:57:16.467Z">
+<meta property="og:updated_time" content="2019-04-06T20:42:38.570Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
-<meta name="twitter:description" content="LightLDA配置文档一、配置机器介绍IP：101.200.39.143 操作系统：Ubuntu 18.04.2 LTS 64位 gcc版本：gcc (Ubuntu 7.3.0-27ubuntu1~18.04) 7.3.0 python版本：Python 2.7.15rc1 二、依赖工具安装安装之前需要先安装版本控制工具git： 1sudo apt update &amp;amp;&amp;amp; sudo">
+<meta name="twitter:title" content="LightLDA配置文档">
+<meta name="twitter:description" content="一、配置机器介绍IP：101.200.39.143 操作系统：Ubuntu 18.04.2 LTS 64位 gcc版本：gcc (Ubuntu 7.3.0-27ubuntu1~18.04) 7.3.0 python版本：Python 2.7.15rc1 二、依赖工具安装安装之前需要先安装版本控制工具git： 1sudo apt update &amp;amp;&amp;amp; sudo apt install">
 <meta name="twitter:image" content="http://yoursite.com/2019/04/07/LightLDA配置文档/LightLDA配置文档/1554056398420.png">
 
   
@@ -163,7 +163,7 @@ ga('send', 'pageview');
 
   <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#LightLDA配置文档"><span class="toc-text">LightLDA配置文档</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、配置机器介绍"><span class="toc-text">一、配置机器介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、依赖工具安装"><span class="toc-text">二、依赖工具安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、LightLDA安装"><span class="toc-text">三、LightLDA安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#四、安装时遇到的问题"><span class="toc-text">四、安装时遇到的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-无法将multiverso包clone到本地"><span class="toc-text">1. 无法将multiverso包clone到本地</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-无法下载zeromq-4-1-3-tar-gz文件"><span class="toc-text">2. 无法下载zeromq-4.1.3.tar.gz文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-在multiverso目录下执行make-j4-all时编译失败："><span class="toc-text">3. 在multiverso目录下执行make -j4 all时编译失败：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#五、运行sample"><span class="toc-text">五、运行sample</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#六、运行结果"><span class="toc-text">六、运行结果</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、配置机器介绍"><span class="toc-text">一、配置机器介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、依赖工具安装"><span class="toc-text">二、依赖工具安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、LightLDA安装"><span class="toc-text">三、LightLDA安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#四、安装时遇到的问题"><span class="toc-text">四、安装时遇到的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-无法将multiverso包clone到本地"><span class="toc-text">1. 无法将multiverso包clone到本地</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-无法下载zeromq-4-1-3-tar-gz文件"><span class="toc-text">2. 无法下载zeromq-4.1.3.tar.gz文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-在multiverso目录下执行make-j4-all时编译失败："><span class="toc-text">3. 在multiverso目录下执行make -j4 all时编译失败：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#五、运行sample"><span class="toc-text">五、运行sample</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#六、运行结果"><span class="toc-text">六、运行结果</span></a></li></ol>
   </div>
 
 
@@ -171,7 +171,7 @@ ga('send', 'pageview');
 <div class="content content-post CENTER">
    <article id="post-LightLDA配置文档" class="article article-type-post" itemprop="blogPost">
   <header class="article-header">
-    <h1 class="post-title">(no title)</h1>
+    <h1 class="post-title">LightLDA配置文档</h1>
 
     <div class="article-meta">
       <span>
@@ -204,7 +204,7 @@ ga('send', 'pageview');
 
   <div class="article-content">
     
-      <h1 id="LightLDA配置文档"><a href="#LightLDA配置文档" class="headerlink" title="LightLDA配置文档"></a>LightLDA配置文档</h1><h2 id="一、配置机器介绍"><a href="#一、配置机器介绍" class="headerlink" title="一、配置机器介绍"></a>一、配置机器介绍</h2><p>IP：101.200.39.143</p>
+      <h2 id="一、配置机器介绍"><a href="#一、配置机器介绍" class="headerlink" title="一、配置机器介绍"></a>一、配置机器介绍</h2><p>IP：101.200.39.143</p>
 <p>操作系统：Ubuntu 18.04.2 LTS 64位</p>
 <p>gcc版本：gcc (Ubuntu 7.3.0-27ubuntu1~18.04) 7.3.0</p>
 <p>python版本：Python 2.7.15rc1</p>
