@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Shadowsocks安装 | Hexo</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="linux,python,Django,backend">
+  
+
+  <meta name="description" content="安装pip1sudo apt install python-pip 安装shadowsocks（必须加sudo）1sudo pip install shadowsocks 配置文件/etc/shadowsocks/config.json内容123456789&amp;#123;  &amp;quot;server&amp;quot;: &amp;quot;0.0.0.0&amp;quot;, # 配置客户端时此处需填写服务器地址  &amp;q">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shadowsocks安装">
+<meta property="og:url" content="http://yoursite.com/2019/05/03/shadowsocks安装/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="安装pip1sudo apt install python-pip 安装shadowsocks（必须加sudo）1sudo pip install shadowsocks 配置文件/etc/shadowsocks/config.json内容123456789&amp;#123;  &amp;quot;server&amp;quot;: &amp;quot;0.0.0.0&amp;quot;, # 配置客户端时此处需填写服务器地址  &amp;q">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-05-03T15:19:42.191Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shadowsocks安装">
+<meta name="twitter:description" content="安装pip1sudo apt install python-pip 安装shadowsocks（必须加sudo）1sudo pip install shadowsocks 配置文件/etc/shadowsocks/config.json内容123456789&amp;#123;  &amp;quot;server&amp;quot;: &amp;quot;0.0.0.0&amp;quot;, # 配置客户端时此处需填写服务器地址  &amp;q">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-38189205-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+</head>
+</html>
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">导航</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">导航</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/project/" rel="noopener noreferrer" target="_self">
+            项目
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+            搜索
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装pip"><span class="toc-text">安装pip</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装shadowsocks（必须加sudo）"><span class="toc-text">安装shadowsocks（必须加sudo）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置文件-etc-shadowsocks-config-json内容"><span class="toc-text">配置文件/etc/shadowsocks/config.json内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启动shadowsocks"><span class="toc-text">启动shadowsocks</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-shadowsocks安装" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">Shadowsocks安装</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2019.05.03</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>John Doe</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h2 id="安装pip"><a href="#安装pip" class="headerlink" title="安装pip"></a>安装pip</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install python-pip</span><br></pre></td></tr></table></figure>
+<h2 id="安装shadowsocks（必须加sudo）"><a href="#安装shadowsocks（必须加sudo）" class="headerlink" title="安装shadowsocks（必须加sudo）"></a>安装shadowsocks（必须加<code>sudo</code>）</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pip install shadowsocks</span><br></pre></td></tr></table></figure>
+<h2 id="配置文件-etc-shadowsocks-config-json内容"><a href="#配置文件-etc-shadowsocks-config-json内容" class="headerlink" title="配置文件/etc/shadowsocks/config.json内容"></a>配置文件<code>/etc/shadowsocks/config.json</code>内容</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;server&quot;: &quot;0.0.0.0&quot;, # 配置客户端时此处需填写服务器地址</span><br><span class="line">  &quot;server_port&quot;: 8388,</span><br><span class="line">  &quot;local_address&quot;: &quot;127.0.0.1&quot;,</span><br><span class="line">  &quot;local_port&quot;: 1080,</span><br><span class="line">  &quot;password&quot;:&quot;liuwei321.0&quot;,</span><br><span class="line">  &quot;timeout&quot;: 300,</span><br><span class="line">  &quot;method&quot;: &quot;aes-256-cfb&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="启动shadowsocks"><a href="#启动shadowsocks" class="headerlink" title="启动shadowsocks"></a>启动shadowsocks</h2><p>启动ss服务器：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ssserver -c /etc/shadowsocks/config.json -d start</span><br></pre></td></tr></table></figure>
+<p>启动ss客户端：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo sslocal -c /etc/shadowsocks/config.json -d start</span><br></pre></td></tr></table></figure>
+<p>启动时遇到如下问题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">INFO: loading config from /etc/shadowsocks.json</span><br><span class="line">2019-03-30 15:16:08 INFO     loading libcrypto from libcrypto.so.1.1</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;/usr/local/bin/ssserver&quot;, line 11, in &lt;module&gt;</span><br><span class="line">    load_entry_point(&apos;shadowsocks==2.8.2&apos;, &apos;console_scripts&apos;, &apos;ssserver&apos;)()</span><br><span class="line">  File &quot;/usr/local/lib/python2.7/dist-packages/shadowsocks/server.py&quot;, line 34, in main</span><br><span class="line">    config = shell.get_config(False)</span><br><span class="line">  File &quot;/usr/local/lib/python2.7/dist-packages/shadowsocks/shell.py&quot;, line 262, in get_config</span><br><span class="line">    check_config(config, is_local)</span><br><span class="line">  File &quot;/usr/local/lib/python2.7/dist-packages/shadowsocks/shell.py&quot;, line 124, in check_config</span><br><span class="line">    encrypt.try_cipher(config[&apos;password&apos;], config[&apos;method&apos;])</span><br><span class="line">  File &quot;/usr/local/lib/python2.7/dist-packages/shadowsocks/encrypt.py&quot;, line 44, in try_cipher</span><br><span class="line">    Encryptor(key, method)</span><br><span class="line">  File &quot;/usr/local/lib/python2.7/dist-packages/shadowsocks/encrypt.py&quot;, line 83, in __init__</span><br><span class="line">    random_string(self._method_info[1]))</span><br><span class="line">  File &quot;/usr/local/lib/python2.7/dist-packages/shadowsocks/encrypt.py&quot;, line 109, in get_cipher</span><br><span class="line">    return m[2](method, key, iv, op)</span><br><span class="line">  File &quot;/usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.py&quot;, line 76, in __init__</span><br><span class="line">    load_openssl()</span><br><span class="line">  File &quot;/usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.py&quot;, line 52, in load_openssl</span><br><span class="line">    libcrypto.EVP_CIPHER_CTX_cleanup.argtypes = (c_void_p,)</span><br><span class="line">  File &quot;/usr/lib/python2.7/ctypes/__init__.py&quot;, line 379, in __getattr__</span><br><span class="line">    func = self.__getitem__(name)</span><br><span class="line">  File &quot;/usr/lib/python2.7/ctypes/__init__.py&quot;, line 384, in __getitem__</span><br><span class="line">    func = self._FuncPtr((name_or_ordinal, self))</span><br><span class="line">AttributeError: /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1: undefined symbol: EVP_CIPHER_CTX_cleanup</span><br></pre></td></tr></table></figure>
+<p>解决方法：</p>
+<p>修改<code>/usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.py</code>文件 (如果找不到该文件可以使用<code>find</code>命令查找文件位置)，将第52行</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">libcrypto.EVP_CIPHER_CTX_cleanup.argtypes = (c_void_p,)</span><br></pre></td></tr></table></figure>
+<p>修改为</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">libcrypto.EVP_CIPHER_CTX_reset.argtypes = (c_void_p,)</span><br></pre></td></tr></table></figure>
+<p>将第111行</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">libcrypto.EVP_CIPHER_CTX_cleanup(self._ctx)</span><br></pre></td></tr></table></figure>
+<p>修改为</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">libcrypto.EVP_CIPHER_CTX_reset(self._ctx)</span><br></pre></td></tr></table></figure>
+<p>最后重新启动shadowsocks即可。</p>
+
+    
+  </div>
+
+</article>
+
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">赞赏</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持作者</div>
+        <ul>
+        
+          <li class="item">
+            
+              <span>支付宝扫一扫</span>
+            
+            <img src="/images/qr-alipay.jpg" alt>
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2019/05/03/os-lab环境配置/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/project/" rel="noopener noreferrer" target="_self">
+              项目
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+              搜索
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    
+
+<!-- Gitalk评论插件通用代码 -->
+<div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '1b44d25ad7168452a82f',
+  clientSecret: '846288f4efe0b4cdcc578c48cc2825722b2a5425',
+  repo: 'laudavid.github.io',
+  owner: 'laudavid',
+  // 在这里设置一下截取前50个字符串, 这是因为 github 对 label 的长度有了要求, 如果超过
+  // 50个字符串则会报错.
+  // id: location.pathname.split('/').pop().substring(0, 49),
+  id: location.pathname,
+  admin: ['laudavid'],
+  // facebook-like distraction free mode
+  distractionFreeMode: false
+})
+gitalk.render('gitalk-container')
+</script>
+<!-- Gitalk代码结束 -->
+
+
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

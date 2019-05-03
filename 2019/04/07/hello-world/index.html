@@ -12,7 +12,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="前端,设计,前端开发,用户体验,设计,frontend,design,nodejs,JavaScript">
+    <meta name="keywords" content="linux,python,Django,backend">
   
 
   <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
@@ -116,6 +116,12 @@ ga('send', 'pageview');
         </li>
       
         <li class="item-toolbox">
+          <a class="CIRCLE" href="/project/" rel="noopener noreferrer" target="_self">
+            项目
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
           <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
             分类
           </a>
@@ -128,26 +134,14 @@ ga('send', 'pageview');
         </li>
       
         <li class="item-toolbox">
-          <a class="CIRCLE" href="/link/" rel="noopener noreferrer" target="_self">
-            友链
+          <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+            搜索
           </a>
         </li>
       
         <li class="item-toolbox">
           <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
             关于
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="CIRCLE" href="/atom.xml" rel="noopener noreferrer" target="_blank">
-            RSS
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
-            搜索
           </a>
         </li>
       
@@ -220,23 +214,16 @@ ga('send', 'pageview');
    
   <div class="text-center donation">
     <div class="inner-donation">
-      <span class="btn-donation">支持一下</span>
+      <span class="btn-donation">赞赏</span>
       <div class="donation-body">
-        <div class="tip text-center">扫一扫，支持forsigner</div>
+        <div class="tip text-center">扫一扫，支持作者</div>
         <ul>
-        
-          <li class="item">
-            
-              <span>微信扫一扫</span>
-            
-            <img src="/images/qr-wechat.png" alt>
-          </li>
         
           <li class="item">
             
               <span>支付宝扫一扫</span>
             
-            <img src="/images/qr-alipay.png" alt>
+            <img src="/images/qr-alipay.jpg" alt>
           </li>
         
         </ul>
@@ -250,7 +237,7 @@ ga('send', 'pageview');
     <a class="hide pull-left" href="/">
         <i class="icon icon-angle-left"></i>
     </a>
-    <a class="show pull-right" href="/2019/04/07/LightLDA配置文档/">
+    <a class="show pull-right" href="/2019/05/03/LightLDA配置/">
         <i class="icon icon-angle-right"></i>
     </a>
   </div>
@@ -285,6 +272,12 @@ ga('send', 'pageview');
           </li>
         
           <li class="item-toolbox">
+            <a class="CIRCLE" href="/project/" rel="noopener noreferrer" target="_self">
+              项目
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
             <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
               分类
             </a>
@@ -297,26 +290,14 @@ ga('send', 'pageview');
           </li>
         
           <li class="item-toolbox">
-            <a class="CIRCLE" href="/link/" rel="noopener noreferrer" target="_self">
-              友链
+            <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+              搜索
             </a>
           </li>
         
           <li class="item-toolbox">
             <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
               关于
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a class="CIRCLE" href="/atom.xml" rel="noopener noreferrer" target="_blank">
-              RSS
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
-              搜索
             </a>
           </li>
         
@@ -351,15 +332,15 @@ ga('send', 'pageview');
 <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
 <script>
 const gitalk = new Gitalk({
-  clientID: '277317290454635afa73',
-  clientSecret: '78223c859304da5e8d71bfce136d436c6ff95c37',
-  repo: 'blog-comment',
-  owner: 'forsigner',
+  clientID: '1b44d25ad7168452a82f',
+  clientSecret: '846288f4efe0b4cdcc578c48cc2825722b2a5425',
+  repo: 'laudavid.github.io',
+  owner: 'laudavid',
   // 在这里设置一下截取前50个字符串, 这是因为 github 对 label 的长度有了要求, 如果超过
   // 50个字符串则会报错.
   // id: location.pathname.split('/').pop().substring(0, 49),
   id: location.pathname,
-  admin: ['forsigner'],
+  admin: ['laudavid'],
   // facebook-like distraction free mode
   distractionFreeMode: false
 })
