@@ -345,32 +345,31 @@ ga('send', 'pageview');
     
     
 
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment"></div>
+    <script>
+        var notify = 'true' == 'true' ? true : false;
+        var verify = 'true' == 'true' ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "uenAg1dPJojF01ancoJryEqF-gzGzoHsz",
+            appKey: "kkQwQlp0gGdcmbGhH23AW4Hi",
+            avatar:'mm',
+            placeholder: "说点什么",
+            guest_info:guest_info,
+            pageSize:'5'
+        });
+    </script>
+  
     
-
-<!-- Gitalk评论插件通用代码 -->
-<div id="gitalk-container"></div>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-<script>
-const gitalk = new Gitalk({
-  clientID: '1b44d25ad7168452a82f',
-  clientSecret: '846288f4efe0b4cdcc578c48cc2825722b2a5425',
-  repo: 'laudavid.github.io',
-  owner: 'laudavid',
-  // 在这里设置一下截取前50个字符串, 这是因为 github 对 label 的长度有了要求, 如果超过
-  // 50个字符串则会报错.
-  // id: location.pathname.split('/').pop().substring(0, 49),
-  id: location.pathname,
-  admin: ['laudavid'],
-  // facebook-like distraction free mode
-  distractionFreeMode: false
-})
-gitalk.render('gitalk-container')
-</script>
-<!-- Gitalk代码结束 -->
-
-
 
   </div>
 
