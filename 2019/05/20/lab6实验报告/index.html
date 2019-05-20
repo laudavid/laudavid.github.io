@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>os-lab6实验报告 | David Lau</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="linux,python,Django,backend">
+  
+
+  <meta name="description" content="一、实验思考题Thinking 6.1 示例代码中，父进程操作管道的写端，子进程操作管道的读端。如果现在想让父进程作为“读者”，代码应当如何修改？  只需要交换代码中的第24行case 0:和第32行default:的位置即可，让父进程关闭写端，操作读端，子进程关闭读端，操作写端。 Thinking 6.2 上面这种不同步修改pp_ref 而导致的进程竞争问题在user/fd.c中的dup函数中也">
+<meta property="og:type" content="article">
+<meta property="og:title" content="os-lab6实验报告">
+<meta property="og:url" content="http://yoursite.com/2019/05/20/lab6实验报告/index.html">
+<meta property="og:site_name" content="David Lau">
+<meta property="og:description" content="一、实验思考题Thinking 6.1 示例代码中，父进程操作管道的写端，子进程操作管道的读端。如果现在想让父进程作为“读者”，代码应当如何修改？  只需要交换代码中的第24行case 0:和第32行default:的位置即可，让父进程关闭写端，操作读端，子进程关闭读端，操作写端。 Thinking 6.2 上面这种不同步修改pp_ref 而导致的进程竞争问题在user/fd.c中的dup函数中也">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-05-20T15:56:56.841Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="os-lab6实验报告">
+<meta name="twitter:description" content="一、实验思考题Thinking 6.1 示例代码中，父进程操作管道的写端，子进程操作管道的读端。如果现在想让父进程作为“读者”，代码应当如何修改？  只需要交换代码中的第24行case 0:和第32行default:的位置即可，让父进程关闭写端，操作读端，子进程关闭读端，操作写端。 Thinking 6.2 上面这种不同步修改pp_ref 而导致的进程竞争问题在user/fd.c中的dup函数中也">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-38189205-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+</head>
+</html>
+<body >
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">导航</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">导航</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/project/" rel="noopener noreferrer" target="_self">
+            项目
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+            搜索
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、实验思考题"><span class="toc-text">一、实验思考题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Thinking-6-1"><span class="toc-text">Thinking 6.1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Thinking-6-2"><span class="toc-text">Thinking 6.2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Thinking-6-3"><span class="toc-text">Thinking 6.3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Thinking-6-4"><span class="toc-text">Thinking 6.4</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Thinking-6-5"><span class="toc-text">Thinking 6.5</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、实验难点"><span class="toc-text">二、实验难点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三、体会与感想"><span class="toc-text">三、体会与感想</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#四、指导书反馈"><span class="toc-text">四、指导书反馈</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-lab6实验报告" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">os-lab6实验报告</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2019.05.20</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>David Lau</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="一、实验思考题"><a href="#一、实验思考题" class="headerlink" title="一、实验思考题"></a>一、实验思考题</h1><h2 id="Thinking-6-1"><a href="#Thinking-6-1" class="headerlink" title="Thinking 6.1"></a>Thinking 6.1</h2><blockquote>
+<p>示例代码中，父进程操作管道的写端，子进程操作管道的读端。如果现在想让父进程作为“读者”，代码应当如何修改？</p>
+</blockquote>
+<p>只需要交换代码中的第24行<code>case 0:</code>和第32行<code>default:</code>的位置即可，让父进程关闭写端，操作读端，子进程关闭读端，操作写端。</p>
+<h2 id="Thinking-6-2"><a href="#Thinking-6-2" class="headerlink" title="Thinking 6.2"></a>Thinking 6.2</h2><blockquote>
+<p>上面这种不同步修改pp_ref 而导致的进程竞争问题在user/fd.c中的dup函数中也存在。请结合代码模仿上述情景，分析一下我们的dup函数中为什么会出现预想之外的情况？</p>
+</blockquote>
+<p>dup函数将一个文件描述符对应的内容映射到另一个文件描述符。假设我们将一个管道的读端或写端对应的文件描述符（如fd[0]）映射到另一个文件描述符（如文件描述符编号为0，对应标准输入文件），映射之前fd[0]，fd[1]和pipe的引用次数分别为1，1，2。按dup函数的执行顺序，会先将fd[0]的引用次数加1，然后将pipe的引用次数加1，如果fd[0]的引用次数加1后恰好发生时钟中断，然后跳转到另一进程调用_pipeisclosed函数判断管道写端是否关闭，由于pageref(p[0]) == pageref(pipe) == 2，故误认为写端关闭，导致出现判断错误。</p>
+<h2 id="Thinking-6-3"><a href="#Thinking-6-3" class="headerlink" title="Thinking 6.3"></a>Thinking 6.3</h2><blockquote>
+<p>阅读上述材料并思考：为什么系统调用一定是原子操作呢？如果你觉得不是所有的系统调用都是原子操作，请给出反例。希望能结合相关代码进行分析。</p>
+</blockquote>
+<p>在我们的小操作系统中，进行系统调用陷入内核态时会进行屏蔽中断的操作，系统调用执行完成后才会解除中断屏蔽，所以执行系统调用函数的相关代码时不会受到时钟中断等因素的影响而被打断，所以进行系统调用一定是原子操作。</p>
+<p>用于屏蔽中断位的设置的汇编宏：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.macro CLI</span><br><span class="line">        mfc0    t0, CP0_STATUS</span><br><span class="line">        li      t1, (STATUS_CU0 | <span class="number">0x1</span>)</span><br><span class="line">        <span class="keyword">or</span>      t0, t1</span><br><span class="line">        xor     t0, <span class="number">0x1</span></span><br><span class="line">        mtc0    t0, CP0_STATUS</span><br><span class="line">.endm</span><br></pre></td></tr></table></figure>
+<p>但是在Unix/Linux中并不是所有的系统调用都是原子操作，如write系统调用就可以被打断。</p>
+<p>而且上面说的仅针对单核的情况，如果是多核的环境中，单纯的屏蔽中断，无法保证系统调用为原子操作，比如屏蔽了这个cpu的中断，其他的cpu运行的进程依然可以执行内存读写的操作。</p>
+<h2 id="Thinking-6-4"><a href="#Thinking-6-4" class="headerlink" title="Thinking 6.4"></a>Thinking 6.4</h2><blockquote>
+<p>仔细阅读上面这段话，并思考下列问题</p>
+<ul>
+<li>按照上述说法控制pipeclose 中fd 和pipe unmap 的顺序，是否可以解决上述场景的进程竞争问题？给出你的分析过程。</li>
+<li>我们只分析了close 时的情形，那么对于dup 中出现的情况又该如何解决？请模仿上述材料写写你的理解。</li>
+</ul>
+</blockquote>
+<p>（1）可以解决上述场景的进程竞争问题。因为正常情况下pipe的引用次数总比fd要高，所以先对fd的引用次数减1，再对pipe的引用次数减1，这样在任何时候发生中断时pipe的引用次数都要大于fd的引用次数，不会出现二者相等的情况，也就不会造成对管道是否关闭的误判。</p>
+<p>（2）dup函数执行时正常情况下pipe的引用次数总比fd要高，所以先对pipe的引用次数加1，再对fd的引用次数加1，这样在任何时候发生中断时pipe的引用次数都要大于fd的引用次数，不会出现二者相等的情况，也就不会造成对管道是否关闭的误判。</p>
+<h2 id="Thinking-6-5"><a href="#Thinking-6-5" class="headerlink" title="Thinking 6.5"></a>Thinking 6.5</h2><blockquote>
+<p>请解释spawn函数中注释标记为Share memory 一段的作用，并说明为什么该段代码是正确的。你可以尝试对该段代码进行改动以探究其对运行结果的影响。</p>
+</blockquote>
+<p>这段代码将父进程地址空间中带有PTE_LIBRARY的有效页面都映射到子进程的对应地址空间。</p>
+<p>函数在访问页表之前会先判断页目录中对应页表项的有效性，页目录中页表项有效时才会进一步访问对应页表，且在用户态下通过*vpd数组和*vpt数组访问页目录和页表项，通过syscall_mem_map系统调用来映射地址空间，不会直接访问内核地址空间，所以是正确的。</p>
+<h1 id="二、实验难点"><a href="#二、实验难点" class="headerlink" title="二、实验难点"></a>二、实验难点</h1><h1 id="三、体会与感想"><a href="#三、体会与感想" class="headerlink" title="三、体会与感想"></a>三、体会与感想</h1><h1 id="四、指导书反馈"><a href="#四、指导书反馈" class="headerlink" title="四、指导书反馈"></a>四、指导书反馈</h1>
+    
+  </div>
+
+</article>
+
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">赞赏</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持作者</div>
+        <ul>
+        
+          <li class="item">
+            
+              <span>支付宝扫一扫</span>
+            
+            <img src="/images/qr-alipay.jpg" alt>
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2019/05/20/lab5实验报告/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2019/05/20/lab0实验报告/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/project/" rel="noopener noreferrer" target="_self">
+              项目
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+              搜索
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment"></div>
+    <script>
+        var notify = 'true' == 'true' ? true : false;
+        var verify = 'true' == 'true' ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "uenAg1dPJojF01ancoJryEqF-gzGzoHsz",
+            appKey: "kkQwQlp0gGdcmbGhH23AW4Hi",
+            avatar:'mm',
+            placeholder: "说点什么",
+            guest_info:guest_info,
+            pageSize:'5'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+
+  <footer id="footer" class="footer" style="font-size: 14px; position: fixed; left: 0; bottom: 0; width: 100%;">
+    <div class="footer-inner" style="text-align: center;">
+      <p>Hosted by
+        <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" style="border:0">
+          <img src="/images/upyun_logo.min.svg" style="width: 60px; display: inline; vertical-align: middle;">
+        </a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

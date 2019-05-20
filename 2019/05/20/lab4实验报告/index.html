@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>os-lab4实验报告 | David Lau</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="linux,python,Django,backend">
+  
+
+  <meta name="description" content="一、实验思考题Thinking 4.1 思考并回答下面的问题：  内核在保存现场的时候是如何避免破坏通用寄存器的？ 系统陷入内核调用后可以直接从当时的\$a0-\$a3 参数寄存器中得到用户调用msyscall 留下的信息吗？ 我们是怎么做到让sys 开头的函数“认为”我们提供了和用户调用msyscall 时同样的参数的？ 内核处理系统调用的过程对Trapframe 做了哪些更改？这种修改对应的用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="os-lab4实验报告">
+<meta property="og:url" content="http://yoursite.com/2019/05/20/lab4实验报告/index.html">
+<meta property="og:site_name" content="David Lau">
+<meta property="og:description" content="一、实验思考题Thinking 4.1 思考并回答下面的问题：  内核在保存现场的时候是如何避免破坏通用寄存器的？ 系统陷入内核调用后可以直接从当时的\$a0-\$a3 参数寄存器中得到用户调用msyscall 留下的信息吗？ 我们是怎么做到让sys 开头的函数“认为”我们提供了和用户调用msyscall 时同样的参数的？ 内核处理系统调用的过程对Trapframe 做了哪些更改？这种修改对应的用">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-05-20T15:56:27.883Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="os-lab4实验报告">
+<meta name="twitter:description" content="一、实验思考题Thinking 4.1 思考并回答下面的问题：  内核在保存现场的时候是如何避免破坏通用寄存器的？ 系统陷入内核调用后可以直接从当时的\$a0-\$a3 参数寄存器中得到用户调用msyscall 留下的信息吗？ 我们是怎么做到让sys 开头的函数“认为”我们提供了和用户调用msyscall 时同样的参数的？ 内核处理系统调用的过程对Trapframe 做了哪些更改？这种修改对应的用">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-38189205-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+</head>
+</html>
+<body >
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">导航</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">导航</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/project/" rel="noopener noreferrer" target="_self">
+            项目
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+            搜索
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、实验思考题"><span class="toc-text">一、实验思考题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Thinking-4-1"><span class="toc-text">Thinking 4.1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Thinking-4-2"><span class="toc-text">Thinking 4.2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Thinking-4-3"><span class="toc-text">Thinking 4.3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Thinking-4-4"><span class="toc-text">Thinking 4.4</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Thinking-4-5"><span class="toc-text">Thinking 4.5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Thinking-4-6"><span class="toc-text">Thinking 4.6</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Thinking-4-7"><span class="toc-text">Thinking 4.7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Thinking-4-8"><span class="toc-text">Thinking 4.8</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、实验难点"><span class="toc-text">二、实验难点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三、体会与感想"><span class="toc-text">三、体会与感想</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#四、指导书反馈"><span class="toc-text">四、指导书反馈</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-lab4实验报告" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">os-lab4实验报告</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2019.05.20</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>David Lau</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="一、实验思考题"><a href="#一、实验思考题" class="headerlink" title="一、实验思考题"></a>一、实验思考题</h1><h2 id="Thinking-4-1"><a href="#Thinking-4-1" class="headerlink" title="Thinking 4.1"></a>Thinking 4.1</h2><blockquote>
+<p>思考并回答下面的问题：</p>
+<ul>
+<li>内核在保存现场的时候是如何避免破坏通用寄存器的？</li>
+<li>系统陷入内核调用后可以直接从当时的\$a0-\$a3 参数寄存器中得到用户调用msyscall 留下的信息吗？</li>
+<li>我们是怎么做到让sys 开头的函数“认为”我们提供了和用户调用msyscall 时同样的参数的？</li>
+<li>内核处理系统调用的过程对Trapframe 做了哪些更改？这种修改对应的用户态的变化是？</li>
+</ul>
+</blockquote>
+<p>（1）根据stackframe.h头文件中的SAVE_ALL宏，内核在保存现场时先将原栈指针从sp保存于k0中，然后获得新的栈指针，将k0（原sp寄存器）和v0寄存器的值存入栈中，然后利用v0寄存器将其他寄存器的值存入栈中，整个过程中没有改变除v0，sp，k0，k1的其他未保存的通用寄存器，因v0，sp的值已保存，而k0，k1是留给操作系统的寄存器，不需要保护，所以整个过程不会破坏通用寄存器。</p>
+<p>（2）系统通过特权指令syscall 陷入内核调用后依次执行.text.exec_vec3段的异常处理函数，跳转到handle_sys函数执行SAVEALL，CLI宏汇编的过程都没有对\$a0-\$a3寄存器进行改变，可以直接使用。</p>
+<p>（3）调用每个sys 开头的函数之前我们都从当前的内核栈中为6个参数申请特定的空间，按照顺序将参数存入栈中指定的位置，这样sys 开头的函数就可以从a0-a3寄存器和内核栈中获得和用户调用msyscall时同样的参数。</p>
+<p>（4）将Trapframe中cp0_epc增加了4，并将执行系统调用后的返回值存入了reg[2]寄存器，使得系统调用结束后用户态可以获得正确的系统调用返回值并从发生系统调用的下一条指令开始执行。</p>
+<h2 id="Thinking-4-2"><a href="#Thinking-4-2" class="headerlink" title="Thinking 4.2"></a>Thinking 4.2</h2><blockquote>
+<p>思考下面的问题，并对这两个问题谈谈你的理解：</p>
+<ul>
+<li>子进程完全按照fork() 之后父进程的代码执行，说明了什么？</li>
+<li>但是子进程却没有执行fork() 之前父进程的代码，又说明了什么？</li>
+</ul>
+</blockquote>
+<p>（1）说明fork执行后子进程与父进程的代码段和数据段都是相同的，二者是同一个程序，具有相同的状态和信息。</p>
+<p>（2）说明子进程开始的位置和父，子进程的pc值为父进程epc寄存器保存的值，所以子进程会从父进程执行fork之后的位置开始执行。</p>
+<h2 id="Thinking-4-3"><a href="#Thinking-4-3" class="headerlink" title="Thinking 4.3"></a>Thinking 4.3</h2><blockquote>
+<p>关于fork 函数的两个返回值，下面说法正确的是：</p>
+<p>A、fork 在父进程中被调用两次，产生两个返回值</p>
+<p>B、fork 在两个进程中分别被调用一次，产生两个不同的返回值</p>
+<p>C、fork 只在父进程中被调用了一次，在两个进程中各产生一个返回值</p>
+<p>D、fork 只在子进程中被调用了一次，在两个进程中各产生一个返回值</p>
+</blockquote>
+<p>C正确。首先父进程调用fork，fork函数会通过syscall陷入内核，然后执行sys_env_alloc函数，该函数申请一个子进程并将子进程的v0寄存器置0，然后向当前的父进程返回子进程的envid，之后两个进程都从sys_env_alloc系统调用之后的下一条指令开始执行，fork函数最终的返回值与sys_env_alloc函数对应，这样fork就在父子进程中产生了不同返回值。</p>
+<h2 id="Thinking-4-4"><a href="#Thinking-4-4" class="headerlink" title="Thinking 4.4"></a>Thinking 4.4</h2><blockquote>
+<p>如果仔细阅读上述这一段话, 你应该可以发现, 我们并不是对所有的用户空间页都使用duppage 进行了保护。那么究竟哪些用户空间页可以保护，哪些不可以呢，请结合include/mmu.h 里的内存布局图谈谈你的看法。</p>
+</blockquote>
+<p> 根据内存布局图结合lab3的内容，UTOP（UXSTACKTOP）以上的用户空间在所有进程申请时就都被映射到相同的物理地址（PAGES、ENVS）或各自指定的地址（UVPT），不需要保护。</p>
+<p>UXSTACKTOP - BY2PG到UXSTACKTOP的空间是用户进程的异常栈，在写时保护的机制下，若发生写操作，会触发页异常，并将相关信息保存到这部分空间，若此时这段空间仍旧被保护，就可能导致死循环，所以这部分空间不可以被保护。</p>
+<p>USTACKTOP到USTACKTOP + BY2PG的空间在空间分布图上是Invalid memory，0到UTEXT的空间进程没有使用到，都不需要保护。</p>
+<p>综上，需要保护的地址空间只有UTEXT到USTACKTOP之间的可写页面。</p>
+<h2 id="Thinking-4-5"><a href="#Thinking-4-5" class="headerlink" title="Thinking 4.5"></a>Thinking 4.5</h2><blockquote>
+<p>在遍历地址空间存取页表项时你需要使用到vpd 和vpt 这两个“指针的指针”，请思考并回答这几个问题：</p>
+<ul>
+<li>vpt 和vpd 的作用是什么？怎样使用它们？</li>
+<li>从实现的角度谈一下为什么能够通过这种方式来存取进程自身页表？</li>
+<li>它们是如何体现自映射设计的？</li>
+<li>进程能够通过这种存取的方式来修改自己的页表项吗？</li>
+</ul>
+</blockquote>
+<p>（1）vpt用于访问当前进程的二级页表，vpd用于访问当前进程的页目录。</p>
+<p>用法：对于一个虚拟地址va，可以通过<code>（*vpd）[PDX(va)]</code>获得页目录中记录的va对应的二级页表的物理地址，可以通过<code>(*vpt)[VPN(va)]</code>来获得二级页表中记录的va所在页面的物理地址。</p>
+<p>（2）首先，mmu.h文件中对这两个变量进行了声明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">extern volatile Pte* vpt[]; </span><br><span class="line">extern volatile Pde* vpd[];</span><br></pre></td></tr></table></figure>
+<p>然后在entry.S对这两个变量进行了定义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">     .globl vpt </span><br><span class="line"> vpt:     </span><br><span class="line">     .word UVPT </span><br><span class="line">     .globl vpd </span><br><span class="line">vpd:     </span><br><span class="line">     .word (UVPT+(UVPT&gt;&gt;12)*4)</span><br></pre></td></tr></table></figure>
+<p>可以看出这两个变量都是二级指针，vpt指向了UVPT域就也就是当前进程页表项所在的位置，vpd则指向了当前进程页目录所在的位置，所以能够通过（1）的方式来存取进程自身页表。</p>
+<p>（3）<code>(UVPT+(UVPT&gt;&gt;12)*4)</code> 是页目录本身所在的虚拟地址，此时页目录也被视为一个二级页表指向整个页表域所在的4M空间，这个过程体现了自映射设计。</p>
+<p>（4）由于UVPT所处的位置在UTOP之上，且修改页表项同时也需要涉及对TLB的更新等其他操作，擅自更改可能引发异常，所以用户进程不应该随意修改自己的页表项。</p>
+<p>如果在页表的初始化阶段给页表所在的物理页页加上了权限位PTE_R，那么用户进程就可以修改自己的页表项，但是这种修改可能引发不可预测的后果；如果没有给页表所在的物理页页加上权限位PTE_R，那么对页表项的修改就会触发1号异常，并最终跳转到pgfault中断处理函数。</p>
+<h2 id="Thinking-4-6"><a href="#Thinking-4-6" class="headerlink" title="Thinking 4.6"></a>Thinking 4.6</h2><blockquote>
+<p>page_fault_handler 函数中，你可能注意到了一个向异常处理栈复制Trapframe 运行现场的过程，请思考并回答这几个问题：</p>
+<p>这里实现了一个支持类似于“中断重入”的机制，而在什么时候会出现这种“中断重入”？</p>
+<p>内核为什么需要将异常的现场Trapframe 复制到用户空间？</p>
+</blockquote>
+<p>（1）在发生由写时复制特性引发的缺页中断后由用户进程去完成页面复制等处理过程中，有可能会继续发生缺页中断，那么中断会终止当前的异常处理过程，再次进入这个函数。</p>
+<p>（2）因为我们是通过用户进程自身处理写时复制的缺页中断（通过__asm_pgfault_handler汇编函数），用户进程需要从用户空间的Trapframe中取得cp0_badvaddr字段的值，这个值也正是发生缺页中断的虚拟地址，用户程序处理完缺页中断异常后需要直接在用户态下恢复运行现场，也需要用到用户空间的Trapframe，所以需要将异常的现场Trapframe复制到用户空间。</p>
+<h2 id="Thinking-4-7"><a href="#Thinking-4-7" class="headerlink" title="Thinking 4.7"></a>Thinking 4.7</h2><blockquote>
+<p>到这里我们大概知道了这是一个由用户程序处理并由用户程序自身来恢复运行现场的过程，请思考并回答以下几个问题：</p>
+<p>用户处理相比于在内核处理写时复制的缺页中断有什么优势？</p>
+<p>从通用寄存器的用途角度讨论用户空间下进行现场的恢复是如何做到不破坏通用寄存器的？</p>
+</blockquote>
+<p>（1）用户处理完异常恢复现场后可以直接通过跳转指令恢复正常运行，不需要再次进行调度，同时使我们的小操作系统更加符合微内核的设计理念。</p>
+<p>（2）用户空间下进行现场恢复时先使用v0，v1寄存器来恢复CP0等特殊的寄存器，然后通过sp寄存器将其他寄存器进行恢复，最后恢复sp寄存器，这样最后各寄存器都恢复到了发生中断前的状态避免破坏。</p>
+<h2 id="Thinking-4-8"><a href="#Thinking-4-8" class="headerlink" title="Thinking 4.8"></a>Thinking 4.8</h2><blockquote>
+<p>为什么需要将set_pgfault_handler 的调用放置在syscall_env_alloc 之前？</p>
+<p>如果放置在写时复制保护机制完成之后会有怎样的效果？</p>
+<p>子进程需不需要对在entry.S 定义的字__pgfault_handler 赋值？</p>
+</blockquote>
+<p>（1）set_pgfault_handler 函数为通过系统调用当前的父进程设置异常栈 (栈顶为UXSTACKTOP) 和缺页中断处理函数，同时还将用户进程数据区中__pgfault_handler变量赋值为fn，应该越早执行越好（至少应该在写时复制保护机制完成之前）。</p>
+<p>（2）如果放置在写时复制保护机制完成之后，给用户进程数据区中__pgfault_handler变量赋值时就会触发缺页中断，而此时还没有设置好缺页中断处理函数，这个缺页中断将无法进行正确处理。</p>
+<p>（3）子进程页不需要对 __pgfault_handler赋值，因为在父进程中已经对该函数赋过值，子进程__pgfault_handler的值与父进程相同，不需要单独设置。</p>
+<h1 id="二、实验难点"><a href="#二、实验难点" class="headerlink" title="二、实验难点"></a>二、实验难点</h1><h1 id="三、体会与感想"><a href="#三、体会与感想" class="headerlink" title="三、体会与感想"></a>三、体会与感想</h1><h1 id="四、指导书反馈"><a href="#四、指导书反馈" class="headerlink" title="四、指导书反馈"></a>四、指导书反馈</h1><p>对于env.c中env_free函数的最后一条语句LIST_REMOVE(e, env_sched_link)，如果进程在sched_yeild函数调度某一进程e执行之前已经执行过一次LIST_REMOVE(e, env_sched_link)将其从链表中删除，则不能在函数env_free最后出现该语句，此时再次执行该语句可能会对现有的env_sched_list的结构产生影响。从LIST_REMOVE宏可以看出，<code>*(elm)-&gt;field.le_prev = LIST_NEXT((elm), field);</code>语句执行第二次时elm已经不在env_sched_list中，但可能导致将*(elm)-&gt;field.le_prev也就是env_sched_list的LIST_HEAD由本来指向另一个可调度的进程（第一次执行LIST_REMOVE之后新插入的进程）改为NULL，从而导致另一个一个进程无法被调度。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#define	LIST_REMOVE(elm, field) do &#123;					\</span><br><span class="line">if (LIST_NEXT((elm), field) != NULL)				\</span><br><span class="line">		LIST_NEXT((elm), field)-&gt;field.le_prev = 		\</span><br><span class="line">				(elm)-&gt;field.le_prev;				\</span><br><span class="line">	*(elm)-&gt;field.le_prev = LIST_NEXT((elm), field);		\</span><br><span class="line">&#125; while (0)</span><br></pre></td></tr></table></figure>
+<p>在执行pingpang测试程序时，当一个进程被free后，可能导致另一个进程虽然在env_sched_list中却无法被sched_yeild函数找到。</p>
+
+    
+  </div>
+
+</article>
+
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">赞赏</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持作者</div>
+        <ul>
+        
+          <li class="item">
+            
+              <span>支付宝扫一扫</span>
+            
+            <img src="/images/qr-alipay.jpg" alt>
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2019/05/20/lab3实验报告/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2019/05/20/lab5实验报告/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/project/" rel="noopener noreferrer" target="_self">
+              项目
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+              搜索
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment"></div>
+    <script>
+        var notify = 'true' == 'true' ? true : false;
+        var verify = 'true' == 'true' ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "uenAg1dPJojF01ancoJryEqF-gzGzoHsz",
+            appKey: "kkQwQlp0gGdcmbGhH23AW4Hi",
+            avatar:'mm',
+            placeholder: "说点什么",
+            guest_info:guest_info,
+            pageSize:'5'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+
+  <footer id="footer" class="footer" style="font-size: 14px; position: fixed; left: 0; bottom: 0; width: 100%;">
+    <div class="footer-inner" style="text-align: center;">
+      <p>Hosted by
+        <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" style="border:0">
+          <img src="/images/upyun_logo.min.svg" style="width: 60px; display: inline; vertical-align: middle;">
+        </a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
