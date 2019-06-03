@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>ubuntu+nginx+uwsgi+Django+https部署 | David Lau</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="linux,python,Django,backend">
+  
+
+  <meta name="description" content="配置机器介绍操作系统：Ubuntu 18.04.2 LTS 64位 python版本：Python 3.6.7 Django版本：Django 2.2 首先需要使用root用户登录服务器。 安装python3和pip3123apt updateapt install python3apt install python3-pip 安装Django1pip3 install django 配置并启动D">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ubuntu+nginx+uwsgi+Django+https部署">
+<meta property="og:url" content="http://yoursite.com/2019/06/04/ubuntu+nginx+uwsgi+Django+https部署文档/index.html">
+<meta property="og:site_name" content="David Lau">
+<meta property="og:description" content="配置机器介绍操作系统：Ubuntu 18.04.2 LTS 64位 python版本：Python 3.6.7 Django版本：Django 2.2 首先需要使用root用户登录服务器。 安装python3和pip3123apt updateapt install python3apt install python3-pip 安装Django1pip3 install django 配置并启动D">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-06-03T19:45:42.574Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ubuntu+nginx+uwsgi+Django+https部署">
+<meta name="twitter:description" content="配置机器介绍操作系统：Ubuntu 18.04.2 LTS 64位 python版本：Python 3.6.7 Django版本：Django 2.2 首先需要使用root用户登录服务器。 安装python3和pip3123apt updateapt install python3apt install python3-pip 安装Django1pip3 install django 配置并启动D">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-38189205-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+</head>
+</html>
+<body >
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">导航</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">导航</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/project/" rel="noopener noreferrer" target="_self">
+            项目
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+            搜索
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#配置机器介绍"><span class="toc-text">配置机器介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装python3和pip3"><span class="toc-text">安装python3和pip3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Django"><span class="toc-text">安装Django</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置并启动Django项目"><span class="toc-text">配置并启动Django项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装并配置uWSGI"><span class="toc-text">安装并配置uWSGI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装并配置nginx"><span class="toc-text">安装并配置nginx</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启动服务器"><span class="toc-text">启动服务器</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-ubuntu+nginx+uwsgi+Django+https部署文档" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">ubuntu+nginx+uwsgi+Django+https部署</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2019.06.04</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>David Lau</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h2 id="配置机器介绍"><a href="#配置机器介绍" class="headerlink" title="配置机器介绍"></a>配置机器介绍</h2><p>操作系统：Ubuntu 18.04.2 LTS 64位</p>
+<p>python版本：Python 3.6.7</p>
+<p>Django版本：Django 2.2</p>
+<p>首先需要使用root用户登录服务器。</p>
+<h2 id="安装python3和pip3"><a href="#安装python3和pip3" class="headerlink" title="安装python3和pip3"></a>安装python3和pip3</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br><span class="line">apt install python3</span><br><span class="line">apt install python3-pip</span><br></pre></td></tr></table></figure>
+<h2 id="安装Django"><a href="#安装Django" class="headerlink" title="安装Django"></a>安装Django</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install django</span><br></pre></td></tr></table></figure>
+<h2 id="配置并启动Django项目"><a href="#配置并启动Django项目" class="headerlink" title="配置并启动Django项目"></a>配置并启动Django项目</h2><p>下载项目后，进入项目主目录，切换到back_end_server分支，进入backend文件夹，执行</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install -r requirements.txt</span><br></pre></td></tr></table></figure>
+<p>安装相关依赖。下载速度过慢时可以更换pip源为国内源（<a href="https://blog.csdn.net/chenghuikai/article/details/55258957" target="_blank" rel="noopener">https://blog.csdn.net/chenghuikai/article/details/55258957</a>）。</p>
+<p>将settings.example.py文件内容复制到settings.py并修改相关配置：</p>
+<p>在settings.py文件中加入域名：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALLOWED_HOSTS = [<span class="string">'www.example.com'</span>]</span><br></pre></td></tr></table></figure>
+<p>在数据库中构建相关的数据表：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py makemigrations</span><br><span class="line">python3 manage.py migrate</span><br></pre></td></tr></table></figure>
+<p>启动Django自带开发服务器runserver：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py runserver 0:80</span><br></pre></td></tr></table></figure>
+<p>启动之后便可以对服务器进行访问。</p>
+<p>runserver默认使用http连接，可通过如下方式配置ssl证书使用https连接：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip3 install django-extensions </span><br><span class="line">pip3 install django-werkzeug-debugger-runserver </span><br><span class="line">pip3 install pyOpenSSL</span><br></pre></td></tr></table></figure>
+<p>将生成的ssl证书放在服务器上后启动runserver：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py runserver_plus 0:443 --cert-file /etc/certificate/certificate.crt  --key-file /etc/certificate/key.key</span><br></pre></td></tr></table></figure>
+<p>其中<code>--cert-file</code>和<code>--key-file</code>后为对应的ssl证书文件路径。</p>
+<h2 id="安装并配置uWSGI"><a href="#安装并配置uWSGI" class="headerlink" title="安装并配置uWSGI"></a>安装并配置uWSGI</h2><p>Django的主要部署平台是WSGI，它是Python的标准web服务器和应用。uWSGI是实现了WSGI的工具。</p>
+<p>安装uWSGI：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install uwsgi</span><br></pre></td></tr></table></figure>
+<p>遇到如下问题时</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">    [x86_64-linux-gnu-gcc -pthread] core/dot_h.o</span><br><span class="line">    [x86_64-linux-gnu-gcc -pthread] core/config_py.o</span><br><span class="line">    *** uWSGI compiling embedded plugins ***</span><br><span class="line">    [x86_64-linux-gnu-gcc -pthread] plugins/python/python_plugin.o</span><br><span class="line">    In file included from plugins/python/python_plugin.c:1:0:</span><br><span class="line">    plugins/python/uwsgi_python.h:2:10: fatal error: Python.h: No such file or directory</span><br><span class="line">     #include &lt;Python.h&gt;</span><br><span class="line">              ^~~~~~~~~~</span><br><span class="line">    compilation terminated.</span><br><span class="line"></span><br><span class="line">    ----------------------------------------</span><br><span class="line">Command &quot;/usr/bin/python3 -u -c &quot;import setuptools, tokenize;__file__=&apos;/tmp/pip-build-8zavi4g8/uwsgi/setup.py&apos;;f=getattr(tokenize, &apos;open&apos;, open)(__file__);code=f.read().replace(&apos;\r\n&apos;, &apos;\n&apos;);f.close();exec(compile(code, __file__, &apos;exec&apos;))&quot; install --record /tmp/pip-g8yr_0sf-record/install-record.txt --single-version-externally-managed --compile&quot; failed with error code 1 in /tmp/pip-build-8zavi4g8/uwsgi/</span><br></pre></td></tr></table></figure>
+<p>需要安装<code>python3-dev</code>包：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install build-essential python-dev</span><br></pre></td></tr></table></figure>
+<p>在Django项目的同级目录下新建uwsgi目录并在其中添加uwsgi.ini文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[uwsgi]</span><br><span class="line"># 这个端口需要打开</span><br><span class="line">http-socket = :8001</span><br><span class="line"></span><br><span class="line"># 需要生成的sock文件，nginx会通过这个sock文件与django通信</span><br><span class="line"># 注意这个socket文件要放在服务器的根目录下，不要是某个用户的文件夹下</span><br><span class="line"># 否则以后会出现访问权限问题</span><br><span class="line">socket=/www/backend_uwsgi.sock</span><br><span class="line"></span><br><span class="line">chdir = /root/GroupWork/backend/</span><br><span class="line"># module=backend.wsgi:application</span><br><span class="line"></span><br><span class="line"># Django项目中uwsgi.py的路径（相对于Django项目根路径）</span><br><span class="line">wsgi-file = backend/wsgi.py</span><br><span class="line"># wsgi-file = /root/GroupWork/backend/backend/wsgi.py</span><br><span class="line"></span><br><span class="line">master = true</span><br><span class="line"></span><br><span class="line"># 设置启动相应的uwsgi进程数和线程数</span><br><span class="line">processes = 10</span><br><span class="line">threads = 2</span><br><span class="line"></span><br><span class="line"># 设置日志文件路径</span><br><span class="line">daemonize = /root/GroupWork/backend/uwsgi/uwsgi.log</span><br><span class="line">pidfile = /root/GroupWork/backend/uwsgi/uwsgi.pid</span><br><span class="line"></span><br><span class="line"># env = DJANGO_SETTINGS_MODULE=backend.settings</span><br></pre></td></tr></table></figure>
+<p>在根目录下新建www文件夹：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /www</span><br></pre></td></tr></table></figure>
+<p>启动uwsgi：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uwsgi --ini uwsgi/uwsgi.ini</span><br></pre></td></tr></table></figure>
+<p>关闭所有uwsgi进程:</p>
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">killall -9 uwsgi</span><br></pre></td></tr></table></figure>
+<h2 id="安装并配置nginx"><a href="#安装并配置nginx" class="headerlink" title="安装并配置nginx"></a>安装并配置nginx</h2><p>安装Nginx：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install nginx</span><br></pre></td></tr></table></figure>
+<p>在<code>/etc/nginx/conf.d/</code>文件夹内添加如下配置文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"># /etc/nginx/conf.d/django.conf</span><br><span class="line"></span><br><span class="line">upstream django &#123;</span><br><span class="line">    server 服务器的外网ip:443;  # 服务器的外网ip，443是https的默认端口</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">  listen 443 ssl;</span><br><span class="line">  server_name 域名;</span><br><span class="line"></span><br><span class="line">  ssl on;</span><br><span class="line">  # 证书和秘钥的绝对路径</span><br><span class="line">  ssl_certificate /etc/certificate/certificate.crt;</span><br><span class="line">  ssl_certificate_key /etc/certificate/key.key;</span><br><span class="line"></span><br><span class="line">  client_max_body_size 5M;</span><br><span class="line">  charset utf-8;</span><br><span class="line"></span><br><span class="line">  # nginx日志文件的路径</span><br><span class="line">  access_log /root/GroupWork/backend/nginx/https.access.log; </span><br><span class="line">  error_log /root/GroupWork/backend/nginx/https.error.log;</span><br><span class="line"></span><br><span class="line">  # 指定django项目中存储媒体文件的地址</span><br><span class="line">  location /media &#123; </span><br><span class="line">      alias /root/GroupWork/backend/media;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  # 指定django项目中存储静态文件的地址</span><br><span class="line">  location /static &#123;</span><br><span class="line">      alias /root/GroupWork/backend/static;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  location / &#123;</span><br><span class="line">    # 之前配置uwsgi时新建的socket文件</span><br><span class="line">    uwsgi_pass unix:///www/backend_uwsgi.sock; </span><br><span class="line">    include /etc/nginx/uwsgi_params;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>修改/etc/nginx/nginx.conf文件，将nginx的使用用户改变为当前用户：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">user root;</span><br><span class="line">worker_processes auto;</span><br><span class="line">pid /run/nginx.pid;</span><br><span class="line">include /etc/nginx/modules-enabled/*.conf;</span><br></pre></td></tr></table></figure>
+<p>启动nginx：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx</span><br></pre></td></tr></table></figure>
+<p>重启nginx：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reload -s nginx</span><br></pre></td></tr></table></figure>
+<p>强制关闭所有nginx进程：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pkill -9 nginx</span><br></pre></td></tr></table></figure>
+<h2 id="启动服务器"><a href="#启动服务器" class="headerlink" title="启动服务器"></a>启动服务器</h2><p>启动服务器时需先启动uwsgi，再启动Nginx：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uwsgi --ini uwsgi/uwsgi.ini</span><br><span class="line">nginx</span><br></pre></td></tr></table></figure>
+<p>每次修改django项目后都需要重新启动uwsgi：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">killall -9 uwsgi</span><br><span class="line">uwsgi --ini uwsgi/uwsgi.ini</span><br></pre></td></tr></table></figure>
+
+    
+  </div>
+
+</article>
+
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">赞赏</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持作者</div>
+        <ul>
+        
+          <li class="item">
+            
+              <span>支付宝扫一扫</span>
+            
+            <img src="/images/qr-alipay.jpg" alt>
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2019/05/20/lab1实验报告/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/project/" rel="noopener noreferrer" target="_self">
+              项目
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+              搜索
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment"></div>
+    <script>
+        var notify = 'true' == 'true' ? true : false;
+        var verify = 'true' == 'true' ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "uenAg1dPJojF01ancoJryEqF-gzGzoHsz",
+            appKey: "kkQwQlp0gGdcmbGhH23AW4Hi",
+            avatar:'mm',
+            placeholder: "说点什么",
+            guest_info:guest_info,
+            pageSize:'5'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+
+  <footer id="footer" class="footer" style="font-size: 14px; position: fixed; left: 0; bottom: 0; width: 100%;">
+    <div class="footer-inner" style="text-align: center;">
+      <p>Hosted by
+        <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" style="border:0">
+          <img src="/images/upyun_logo.min.svg" style="width: 60px; display: inline; vertical-align: middle;">
+        </a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
