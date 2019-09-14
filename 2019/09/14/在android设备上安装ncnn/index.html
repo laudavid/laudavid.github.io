@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>在android设备上安装ncnn | David Lau</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="linux,python,Django,backend">
+  
+
+  <meta name="description" content="下载并安装android-ndk123wget https://dl.google.com/android/repository/android-ndk-r20-linux-x86_64.zipunzip android-ndk-r20-linux-x86_64.zipexport ANDROID_NDK=/root/android-ndk-r20 重新安装cmake由于本地的cmake版本过低，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在android设备上安装ncnn">
+<meta property="og:url" content="http://yoursite.com/2019/09/14/在android设备上安装ncnn/index.html">
+<meta property="og:site_name" content="David Lau">
+<meta property="og:description" content="下载并安装android-ndk123wget https://dl.google.com/android/repository/android-ndk-r20-linux-x86_64.zipunzip android-ndk-r20-linux-x86_64.zipexport ANDROID_NDK=/root/android-ndk-r20 重新安装cmake由于本地的cmake版本过低，">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-09-14T14:17:23.051Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在android设备上安装ncnn">
+<meta name="twitter:description" content="下载并安装android-ndk123wget https://dl.google.com/android/repository/android-ndk-r20-linux-x86_64.zipunzip android-ndk-r20-linux-x86_64.zipexport ANDROID_NDK=/root/android-ndk-r20 重新安装cmake由于本地的cmake版本过低，">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-38189205-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+</head>
+</html>
+<body >
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">导航</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">导航</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/project/" rel="noopener noreferrer" target="_self">
+            项目
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+            搜索
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#下载并安装android-ndk"><span class="toc-text">下载并安装android-ndk</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重新安装cmake"><span class="toc-text">重新安装cmake</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改android-toolchain-cmake文件"><span class="toc-text">修改android.toolchain.cmake文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构建armv7库"><span class="toc-text">构建armv7库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构建aarch64库"><span class="toc-text">构建aarch64库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#运行benchmark"><span class="toc-text">运行benchmark</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-在android设备上安装ncnn" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">在android设备上安装ncnn</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2019.09.14</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>David Lau</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h2 id="下载并安装android-ndk"><a href="#下载并安装android-ndk" class="headerlink" title="下载并安装android-ndk"></a>下载并安装android-ndk</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https://dl.google.com/android/repository/android-ndk-r20-linux-x86_64.zip</span><br><span class="line">unzip android-ndk-r20-linux-x86_64.zip</span><br><span class="line">export ANDROID_NDK=/root/android-ndk-r20</span><br></pre></td></tr></table></figure>
+<h2 id="重新安装cmake"><a href="#重新安装cmake" class="headerlink" title="重新安装cmake"></a>重新安装cmake</h2><p>由于本地的cmake版本过低，需要重新安装较新版的cmake：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt remove cmake</span><br><span class="line">wget https://github.com/Kitware/CMake/releases/download/v3.15.0-rc4/cmake-3.15.0-rc4-Linux-x86_64.sh</span><br><span class="line">chmod a+x cmake-3.15.0-rc4-Linux-x86_64.sh</span><br><span class="line">./cmake-3.15.0-rc4-Linux-x86_64.sh</span><br></pre></td></tr></table></figure>
+<p>将<code>export PATH=$PATH:/root/cmake-3.15.0-rc4-Linux-x86_64/bin</code>加入<code>.bashrc</code>文件，然后执行<code>source .bashrc</code>使之生效。</p>
+<h2 id="修改android-toolchain-cmake文件"><a href="#修改android-toolchain-cmake文件" class="headerlink" title="修改android.toolchain.cmake文件"></a>修改<code>android.toolchain.cmake</code>文件</h2><p>删除<code>$ANDROID_NDK/build/cmake/android.toolchain.cmake</code>文件中的-g编译选项，加快编译速度</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># edit $ANDROID_NDK/build/cmake/android.toolchain.cmake with your favorite editor</span><br><span class="line"># remove &quot;-g&quot; line</span><br><span class="line">list(APPEND ANDROID_COMPILER_FLAGS</span><br><span class="line">  -g</span><br><span class="line">  -DANDROID</span><br></pre></td></tr></table></figure>
+<h2 id="构建armv7库"><a href="#构建armv7库" class="headerlink" title="构建armv7库"></a>构建armv7库</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ cd /root/ncnn</span><br><span class="line">$ mkdir -p build-android-armv7</span><br><span class="line">$ cd build-android-armv7</span><br><span class="line"></span><br><span class="line">$ cmake -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \</span><br><span class="line">    -DANDROID_ABI=&quot;armeabi-v7a&quot; -DANDROID_ARM_NEON=ON \</span><br><span class="line">    -DANDROID_PLATFORM=android-16 ..</span><br><span class="line"></span><br><span class="line">$ make -j4</span><br><span class="line">$ make install</span><br></pre></td></tr></table></figure>
+<h2 id="构建aarch64库"><a href="#构建aarch64库" class="headerlink" title="构建aarch64库"></a>构建aarch64库</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ cd /root/ncnn</span><br><span class="line">$ mkdir -p build-android-aarch64</span><br><span class="line">$ cd build-android-aarch64</span><br><span class="line"></span><br><span class="line">$ cmake -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \</span><br><span class="line">    -DANDROID_ABI=&quot;arm64-v8a&quot; \</span><br><span class="line">    -DANDROID_PLATFORM=android-21 ..</span><br><span class="line"></span><br><span class="line">$ make -j4</span><br><span class="line">$ make install</span><br></pre></td></tr></table></figure>
+<p>构建的armv7库和aarch64库可分别用于32位和64位的android系统应用。</p>
+<h2 id="运行benchmark"><a href="#运行benchmark" class="headerlink" title="运行benchmark"></a>运行benchmark</h2><p>可将生成的可执行文件benchmark以及对应的模型文件（.param文件）通过adb工具移动到android设备上，然后执行，执行参数与在树莓派上的使用方法类似：</p>
+<p>benchncnn命令参数：</p>
+<table>
+<thead>
+<tr>
+<th>param</th>
+<th>options</th>
+<th>default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loop count</td>
+<td>1~N</td>
+<td>4</td>
+</tr>
+<tr>
+<td>num threads</td>
+<td>1~N</td>
+<td>max_cpu_count</td>
+</tr>
+<tr>
+<td>powersave</td>
+<td>0=all cores, 1=little cores only, 2=big cores only</td>
+<td>0</td>
+</tr>
+<tr>
+<td>gpu device</td>
+<td>-1=cpu-only, 0=gpu0, 1=gpu1 …</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+<p>运行结果（循环10次）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">loop_count = 10</span><br><span class="line">num_threads = 4</span><br><span class="line">powersave = 0</span><br><span class="line">gpu_device = -1</span><br><span class="line">          squeezenet  min =   29.14  max =   45.76  avg =   33.22</span><br><span class="line">     squeezenet_int8  min =   20.37  max =   37.22  avg =   29.00</span><br><span class="line">           mobilenet  min =   42.68  max =   73.56  avg =   48.23</span><br><span class="line">      mobilenet_int8  min =   61.20  max =   62.49  avg =   61.78</span><br><span class="line">        mobilenet_v2  min =   35.22  max =   36.72  avg =   35.62</span><br><span class="line">          shufflenet  min =   14.96  max =   18.50  avg =   16.35</span><br><span class="line">             mnasnet  min =   27.80  max =   32.64  avg =   30.04</span><br><span class="line">     proxylessnasnet  min =   32.82  max =   37.54  avg =   35.42</span><br><span class="line">           googlenet  min =  103.57  max =  106.39  avg =  105.03</span><br><span class="line">      googlenet_int8  min =   75.71  max =  132.83  avg =   91.78</span><br><span class="line">            resnet18  min =   93.59  max =  109.33  avg =  105.63</span><br><span class="line">       resnet18_int8  min =   61.31  max =   69.39  avg =   64.63</span><br><span class="line">             alexnet  min =  150.38  max =  164.10  avg =  152.26</span><br><span class="line">               vgg16  min =  518.96  max =  582.33  avg =  546.02</span><br><span class="line">          vgg16_int8  min =  437.90  max =  445.88  avg =  440.79</span><br><span class="line">            resnet50  min =  231.65  max =  243.47  avg =  239.48</span><br><span class="line">       resnet50_int8  min =  145.00  max =  157.06  avg =  151.37</span><br><span class="line">      squeezenet_ssd  min =   65.00  max =   78.96  avg =   73.94</span><br><span class="line"> squeezenet_ssd_int8  min =   56.06  max =   61.37  avg =   57.79</span><br><span class="line">       mobilenet_ssd  min =   85.86  max =  105.46  avg =   91.98</span><br><span class="line">  mobilenet_ssd_int8  min =   68.17  max =   76.76  avg =   72.99</span><br><span class="line">      mobilenet_yolo  min =  198.65  max =  227.70  avg =  207.74</span><br><span class="line">    mobilenet_yolov3  min =  207.12  max =  216.25  avg =  212.51</span><br></pre></td></tr></table></figure>
+<p>运行结果（循环100次）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">loop_count = 100</span><br><span class="line">num_threads = 4</span><br><span class="line">powersave = 0</span><br><span class="line">gpu_device = -1</span><br><span class="line">          squeezenet  min =   29.11  max =   56.08  avg =   32.97</span><br><span class="line">     squeezenet_int8  min =   20.34  max =   37.02  avg =   24.68</span><br><span class="line">           mobilenet  min =   45.61  max =   68.82  avg =   52.89</span><br><span class="line">      mobilenet_int8  min =   37.70  max =   58.76  avg =   39.37</span><br><span class="line">        mobilenet_v2  min =   32.06  max =   40.40  avg =   36.17</span><br><span class="line">          shufflenet  min =   18.25  max =   28.39  avg =   19.79</span><br><span class="line">             mnasnet  min =   31.70  max =   51.47  avg =   35.67</span><br><span class="line">     proxylessnasnet  min =   39.50  max =   67.35  avg =   42.72</span><br><span class="line">           googlenet  min =  119.33  max =  203.59  avg =  131.72</span><br><span class="line">      googlenet_int8  min =   92.20  max =  129.31  avg =   97.89</span><br><span class="line">            resnet18  min =  121.87  max =  134.22  avg =  126.86</span><br><span class="line">       resnet18_int8  min =   77.67  max =   90.84  avg =   84.02</span><br><span class="line">             alexnet  min =  210.33  max =  250.40  avg =  218.41</span><br><span class="line">               vgg16  min =  715.53  max =  818.08  avg =  755.95</span><br><span class="line">          vgg16_int8  min =  612.73  max =  759.16  avg =  664.68</span><br><span class="line">            resnet50  min =  325.95  max =  414.57  avg =  337.49</span><br><span class="line">       resnet50_int8  min =  214.76  max =  299.01  avg =  228.05</span><br><span class="line">      squeezenet_ssd  min =   90.94  max =  120.16  avg =  104.73</span><br><span class="line"> squeezenet_ssd_int8  min =   77.04  max =  131.72  avg =   88.08</span><br><span class="line">       mobilenet_ssd  min =  127.83  max =  204.57  avg =  139.25</span><br><span class="line">  mobilenet_ssd_int8  min =   94.51  max =  130.23  avg =  102.56</span><br><span class="line">      mobilenet_yolo  min =  289.44  max =  375.77  avg =  305.44</span><br><span class="line">    mobilenet_yolov3  min =  302.33  max =  370.73  avg =  320.63</span><br></pre></td></tr></table></figure>
+
+    
+  </div>
+
+</article>
+
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">赞赏</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持作者</div>
+        <ul>
+        
+          <li class="item">
+            
+              <span>支付宝扫一扫</span>
+            
+            <img src="/images/qr-alipay.jpg" alt>
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2019/09/14/opencv安装/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2019/09/14/在树莓派上安装ncnn/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/project/" rel="noopener noreferrer" target="_self">
+              项目
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+              搜索
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment"></div>
+    <script>
+        var notify = 'true' == 'true' ? true : false;
+        var verify = 'true' == 'true' ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "uenAg1dPJojF01ancoJryEqF-gzGzoHsz",
+            appKey: "kkQwQlp0gGdcmbGhH23AW4Hi",
+            avatar:'mm',
+            placeholder: "说点什么",
+            guest_info:guest_info,
+            pageSize:'5'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+
+  <footer id="footer" class="footer" style="font-size: 14px; position: fixed; left: 0; bottom: 0; width: 100%;">
+    <div class="footer-inner" style="text-align: center;">
+      <p>Hosted by
+        <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" style="border:0">
+          <img src="/images/upyun_logo.min.svg" style="width: 60px; display: inline; vertical-align: middle;">
+        </a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
