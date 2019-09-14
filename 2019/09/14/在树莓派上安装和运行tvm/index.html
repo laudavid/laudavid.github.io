@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>树莓派上安装和运行TVM | David Lau</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="linux,python,Django,backend">
+  
+
+  <meta name="description" content="在树莓派上构建TVM运行时环境TVM可以分为两个部分，一部分为编译时，另一个为运行时，两者可以拆开。因为我们在本地机器上编译，所以树莓派等远程设备只用于运行生成的代码。 1234567git clone --recursive https://github.com/dmlc/tvmcd tvmmkdir buildcp cmake/config.cmake buildcd buildcmake .">
+<meta property="og:type" content="article">
+<meta property="og:title" content="树莓派上安装和运行TVM">
+<meta property="og:url" content="http://yoursite.com/2019/09/14/在树莓派上安装和运行tvm/index.html">
+<meta property="og:site_name" content="David Lau">
+<meta property="og:description" content="在树莓派上构建TVM运行时环境TVM可以分为两个部分，一部分为编译时，另一个为运行时，两者可以拆开。因为我们在本地机器上编译，所以树莓派等远程设备只用于运行生成的代码。 1234567git clone --recursive https://github.com/dmlc/tvmcd tvmmkdir buildcp cmake/config.cmake buildcd buildcmake .">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-09-14T14:24:20.141Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="树莓派上安装和运行TVM">
+<meta name="twitter:description" content="在树莓派上构建TVM运行时环境TVM可以分为两个部分，一部分为编译时，另一个为运行时，两者可以拆开。因为我们在本地机器上编译，所以树莓派等远程设备只用于运行生成的代码。 1234567git clone --recursive https://github.com/dmlc/tvmcd tvmmkdir buildcp cmake/config.cmake buildcd buildcmake .">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-38189205-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+</head>
+</html>
+<body >
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">导航</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">导航</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/project/" rel="noopener noreferrer" target="_self">
+            项目
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+            搜索
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#在树莓派上构建TVM运行时环境"><span class="toc-text">在树莓派上构建TVM运行时环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在树莓派上启动RPC服务器"><span class="toc-text">在树莓派上启动RPC服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在本地机器上和树莓派上进行测试"><span class="toc-text">在本地机器上和树莓派上进行测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#运行benchmark"><span class="toc-text">运行benchmark</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-在树莓派上安装和运行tvm" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">树莓派上安装和运行TVM</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2019.09.14</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>David Lau</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h2 id="在树莓派上构建TVM运行时环境"><a href="#在树莓派上构建TVM运行时环境" class="headerlink" title="在树莓派上构建TVM运行时环境"></a>在树莓派上构建TVM运行时环境</h2><p>TVM可以分为两个部分，一部分为编译时，另一个为运行时，两者可以拆开。因为我们在本地机器上编译，所以树莓派等远程设备只用于运行生成的代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git clone --recursive https://github.com/dmlc/tvm</span><br><span class="line">cd tvm</span><br><span class="line">mkdir build</span><br><span class="line">cp cmake/config.cmake build</span><br><span class="line">cd build</span><br><span class="line">cmake ..</span><br><span class="line">make runtime -j2</span><br></pre></td></tr></table></figure>
+<p>最好使用<code>--recursive</code>选项，<strong>不然会缺一些库</strong></p>
+<p>安装完成后需要在~/.bashrc文件中添加相关的python路径，设置环境变量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PYTHONPATH=$PYTHONPATH:~/tvm/python</span><br></pre></td></tr></table></figure>
+<p>然后执行<code>source ~/.bashrc</code>生效。</p>
+<h2 id="在树莓派上启动RPC服务器"><a href="#在树莓派上启动RPC服务器" class="headerlink" title="在树莓派上启动RPC服务器"></a>在树莓派上启动RPC服务器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m tvm.exec.rpc_server --host 0.0.0.0 --port=9090</span><br></pre></td></tr></table></figure>
+<p>看到以下信息说明启动成功。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INFO:root:RPCServer: bind to 0.0.0.0:9090</span><br></pre></td></tr></table></figure>
+<h2 id="在本地机器上和树莓派上进行测试"><a href="#在本地机器上和树莓派上进行测试" class="headerlink" title="在本地机器上和树莓派上进行测试"></a>在本地机器上和树莓派上进行测试</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np </span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> tvm</span><br><span class="line"><span class="keyword">from</span> tvm <span class="keyword">import</span> rpc</span><br><span class="line"><span class="keyword">from</span> tvm.contrib <span class="keyword">import</span> util</span><br><span class="line"></span><br><span class="line">n = tvm.convert(<span class="number">1024</span>)</span><br><span class="line">A = tvm.placeholder((n,), name=<span class="string">'A'</span>)</span><br><span class="line">B = tvm.compute((n,), <span class="keyword">lambda</span> i: A[i] + <span class="number">1.0</span>, name=<span class="string">'B'</span>)</span><br><span class="line">s = tvm.create_schedule(B.op)</span><br><span class="line"></span><br><span class="line">local_demo = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> local_demo:</span><br><span class="line">    target = <span class="string">'llvm'</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    target = <span class="string">'llvm -target=aarch64-linux-gnu'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">func = tvm.build(s, [A, B], target=target, name=<span class="string">'add_one'</span>)</span><br><span class="line"><span class="comment"># save the lib at a local temp folder</span></span><br><span class="line">temp = util.tempdir()</span><br><span class="line">path = temp.relpath(<span class="string">'lib.tar'</span>)</span><br><span class="line">func.export_library(path)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> local_demo:</span><br><span class="line">    remote = rpc.LocalSession()</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="comment"># The following is my environment, change this to the IP address of your target device</span></span><br><span class="line">    host = <span class="string">'10.135.224.139'</span></span><br><span class="line">    port = <span class="number">9090</span></span><br><span class="line">    remote = rpc.connect(host, port)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">remote.upload(path)</span><br><span class="line">func = remote.load_module(<span class="string">'lib.tar'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># create arrays on the remote device</span></span><br><span class="line">ctx = remote.cpu()</span><br><span class="line">a = tvm.nd.array(np.random.uniform(size=<span class="number">1024</span>).astype(A.dtype), ctx)</span><br><span class="line">b = tvm.nd.array(np.zeros(<span class="number">1024</span>, dtype=A.dtype), ctx)</span><br><span class="line"><span class="comment"># the function will run on the remote device</span></span><br><span class="line">func(a, b)</span><br><span class="line">np.testing.assert_equal(b.asnumpy(), a.asnumpy() + <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">time_f = func.time_evaluator(func.entry_name, ctx, number=<span class="number">10</span>)</span><br><span class="line">cost = time_f(a, b).mean</span><br><span class="line">print(<span class="string">'%g secs/op'</span> % cost)</span><br></pre></td></tr></table></figure>
+<p>将local_demo设为True时只在本地测试，设为False时会通过RPC服务器连接远程的树莓派进行测试。</p>
+<h2 id="运行benchmark"><a href="#运行benchmark" class="headerlink" title="运行benchmark"></a>运行benchmark</h2><p>在本地主机启动RPC Tracker：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m tvm.exec.rpc_tracker</span><br></pre></td></tr></table></figure>
+<p>在树莓派上向tracker注册设备：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m tvm.exec.rpc_server --tracker=10.134.139.87:9190 --key=rasp3b</span><br></pre></td></tr></table></figure>
+<p>在本地主机新开tab查看所有的注册设备：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m tvm.exec.query_rpc_tracker</span><br></pre></td></tr></table></figure>
+<p>可以看到如下结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Tracker address localhost:9190</span><br><span class="line"></span><br><span class="line">Server List</span><br><span class="line">----------------------------</span><br><span class="line">server-address  key</span><br><span class="line">----------------------------</span><br><span class="line">10.135.76.115:38662     server:rasp3b</span><br><span class="line">----------------------------</span><br><span class="line"></span><br><span class="line">Queue Status</span><br><span class="line">------------------------------</span><br><span class="line">key      total  free  pending</span><br><span class="line">------------------------------</span><br><span class="line">rasp3b   1      1     0</span><br><span class="line">------------------------------</span><br></pre></td></tr></table></figure>
+<p>本地主机运行benchmark：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd ~/tvm/apps/benchmark</span><br><span class="line">python3 arm_cpu_imagenet_bench.py --model rk3399 --rpc-key rasp3b</span><br></pre></td></tr></table></figure>
+<p>测试结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">llvm -device=arm_cpu -model=rk3399 -target=aarch64-linux-gnu -mattr=+neon &lt;class &apos;tvm.target.Target&apos;&gt;</span><br><span class="line">--------------------------------------------------</span><br><span class="line">Network Name         Mean Inference Time (std dev)</span><br><span class="line">--------------------------------------------------</span><br><span class="line">mobilenet            127.51 ms           (0.77 ms)</span><br><span class="line">mobilenet_v2         116.62 ms           (0.19 ms)</span><br><span class="line">squeezenet_v1.0      201.25 ms           (3.88 ms) </span><br><span class="line">squeezenet_v1.1      73.80 ms            (0.39 ms)</span><br><span class="line">resnet-18            362.79 ms           (10.02 ms)</span><br><span class="line">resnet-50            784.67 ms           (1.40 ms)</span><br><span class="line">inception_v3         2437.77 ms          (3.95 ms)</span><br><span class="line">densenet-121         819.45 ms           (11.42 ms)</span><br><span class="line">vgg-16               2105.98 ms          (48.26 ms)</span><br></pre></td></tr></table></figure>
+<p>官方给出的运行结果：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>densenet-121</th>
+<th>inception-v3</th>
+<th>mobilenet</th>
+<th>mobilenet-v2</th>
+<th>resnet-18</th>
+<th>resnet-50</th>
+<th>squeezenet-v1.0</th>
+<th>squeezenet-v1.1</th>
+<th>vgg-16</th>
+<th>vgg-19</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Raspberry Pi 3B</td>
+<td>610.2</td>
+<td>2074.2</td>
+<td>121.8</td>
+<td>104.8</td>
+<td>320.0</td>
+<td>726.0</td>
+<td>185.1</td>
+<td>94.0</td>
+<td>1772.0</td>
+<td>2119.8</td>
+</tr>
+<tr>
+<td>Firefly RK3399</td>
+<td>336.8</td>
+<td>1304.4</td>
+<td>77.9</td>
+<td>64.8</td>
+<td>158.6</td>
+<td>403.2</td>
+<td>94.3</td>
+<td>48.2</td>
+<td>903.5</td>
+<td>1086.0</td>
+</tr>
+<tr>
+<td>Huawei P20 Pro</td>
+<td>179.7</td>
+<td>444.7</td>
+<td>41.3</td>
+<td>33.4</td>
+<td>77.4</td>
+<td>232.5</td>
+<td>51.4</td>
+<td>26.0</td>
+<td>486.3</td>
+<td>729.4</td>
+</tr>
+<tr>
+<td>Google Pixel2</td>
+<td>161.0</td>
+<td>434.8</td>
+<td>39.6</td>
+<td>29.3</td>
+<td>66.0</td>
+<td>181.1</td>
+<td>47.3</td>
+<td>23.0</td>
+<td>397.1</td>
+<td>485.0</td>
+</tr>
+<tr>
+<td>Xilinx PYNQ</td>
+<td>2887.0</td>
+<td>9691.7</td>
+<td>721.4</td>
+<td>513.3</td>
+<td>1231.7</td>
+<td>3585.5</td>
+<td>913.0</td>
+<td>478.3</td>
+<td>-1.0</td>
+<td>-1.0</td>
+</tr>
+</tbody>
+</table>
+
+    
+  </div>
+
+</article>
+
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">赞赏</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持作者</div>
+        <ul>
+        
+          <li class="item">
+            
+              <span>支付宝扫一扫</span>
+            
+            <img src="/images/qr-alipay.jpg" alt>
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2019/09/14/在android上安装和运行tvm/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2019/09/14/TVM安装/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/archives/" rel="noopener noreferrer" target="_self">
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/project/" rel="noopener noreferrer" target="_self">
+              项目
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/category/" rel="noopener noreferrer" target="_self">
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/tag/" rel="noopener noreferrer" target="_self">
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/search/" rel="noopener noreferrer" target="_self">
+              搜索
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a class="CIRCLE" href="/about/" rel="noopener noreferrer" target="_self">
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment"></div>
+    <script>
+        var notify = 'true' == 'true' ? true : false;
+        var verify = 'true' == 'true' ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "uenAg1dPJojF01ancoJryEqF-gzGzoHsz",
+            appKey: "kkQwQlp0gGdcmbGhH23AW4Hi",
+            avatar:'mm',
+            placeholder: "说点什么",
+            guest_info:guest_info,
+            pageSize:'5'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+
+  <footer id="footer" class="footer" style="font-size: 14px; position: fixed; left: 0; bottom: 0; width: 100%;">
+    <div class="footer-inner" style="text-align: center;">
+      <p>Hosted by
+        <a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" style="border:0">
+          <img src="/images/upyun_logo.min.svg" style="width: 60px; display: inline; vertical-align: middle;">
+        </a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

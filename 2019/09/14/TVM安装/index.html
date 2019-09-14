@@ -7,7 +7,7 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>ncnn安装教程(Linux x86) | David Lau</title>
+  <title>TVM安装教程 | David Lau</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -15,17 +15,17 @@
     <meta name="keywords" content="linux,python,Django,backend">
   
 
-  <meta name="description" content="1.下载1git clone https://github.com/Tencent/ncnn 2.环境准备protobuf1234567891011tar -xvf protobufcd protobuf./configure --prefix=/usr/local/protobufmakemake checkmake install vim /etc/profile，添加 12export PA">
+  <meta name="description" content="1.下载1git clone --recursive https://github.com/dmlc/tvm 最好使用--recursive选项，不然会缺一些库 2.环境准备1apt install -y python python-dev python-setuptools gcc libtinfo-dev zlib1g-dev python3 python3-pip python2不支持tvm">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ncnn安装教程(Linux x86)">
-<meta property="og:url" content="http://yoursite.com/2019/09/14/ncnn安装/index.html">
+<meta property="og:title" content="TVM安装教程">
+<meta property="og:url" content="http://yoursite.com/2019/09/14/TVM安装/index.html">
 <meta property="og:site_name" content="David Lau">
-<meta property="og:description" content="1.下载1git clone https://github.com/Tencent/ncnn 2.环境准备protobuf1234567891011tar -xvf protobufcd protobuf./configure --prefix=/usr/local/protobufmakemake checkmake install vim /etc/profile，添加 12export PA">
+<meta property="og:description" content="1.下载1git clone --recursive https://github.com/dmlc/tvm 最好使用--recursive选项，不然会缺一些库 2.环境准备1apt install -y python python-dev python-setuptools gcc libtinfo-dev zlib1g-dev python3 python3-pip python2不支持tvm">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-09-14T14:13:01.673Z">
+<meta property="og:updated_time" content="2019-09-14T14:27:01.489Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ncnn安装教程(Linux x86)">
-<meta name="twitter:description" content="1.下载1git clone https://github.com/Tencent/ncnn 2.环境准备protobuf1234567891011tar -xvf protobufcd protobuf./configure --prefix=/usr/local/protobufmakemake checkmake install vim /etc/profile，添加 12export PA">
+<meta name="twitter:title" content="TVM安装教程">
+<meta name="twitter:description" content="1.下载1git clone --recursive https://github.com/dmlc/tvm 最好使用--recursive选项，不然会缺一些库 2.环境准备1apt install -y python python-dev python-setuptools gcc libtinfo-dev zlib1g-dev python3 python3-pip python2不支持tvm">
 
   
 
@@ -154,15 +154,15 @@ ga('send', 'pageview');
 
   <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-下载"><span class="toc-text">1.下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-环境准备"><span class="toc-text">2.环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#protobuf"><span class="toc-text">protobuf</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#opencv"><span class="toc-text">opencv</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-安装ncnn"><span class="toc-text">3.安装ncnn</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-下载"><span class="toc-text">1.下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-环境准备"><span class="toc-text">2.环境准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-安装"><span class="toc-text">3.安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-测试"><span class="toc-text">4.测试</span></a></li></ol>
   </div>
 
 
 
 <div class="content content-post CENTER">
-   <article id="post-ncnn安装" class="article article-type-post" itemprop="blogPost">
+   <article id="post-TVM安装" class="article article-type-post" itemprop="blogPost">
   <header class="article-header">
-    <h1 class="post-title">ncnn安装教程(Linux x86)</h1>
+    <h1 class="post-title">TVM安装教程</h1>
 
     <div class="article-meta">
       <span>
@@ -195,15 +195,24 @@ ga('send', 'pageview');
 
   <div class="article-content">
     
-      <h2 id="1-下载"><a href="#1-下载" class="headerlink" title="1.下载"></a>1.下载</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/Tencent/ncnn</span><br></pre></td></tr></table></figure>
-<h2 id="2-环境准备"><a href="#2-环境准备" class="headerlink" title="2.环境准备"></a>2.环境准备</h2><h3 id="protobuf"><a href="#protobuf" class="headerlink" title="protobuf"></a>protobuf</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf protobuf</span><br><span class="line"></span><br><span class="line">cd protobuf</span><br><span class="line"></span><br><span class="line">./configure --prefix=/usr/local/protobuf</span><br><span class="line"></span><br><span class="line">make</span><br><span class="line"></span><br><span class="line">make check</span><br><span class="line"></span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
-<p>vim /etc/profile，添加</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export PATH=$PATH:/usr/local/protobuf/bin/</span><br><span class="line">export PKG_CONFIG_PATH=/usr/local/protobuf/lib/pkgconfig/</span><br></pre></td></tr></table></figure>
-<p>vim /etc/ld.so.conf，在文件中添加</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/protobuf/lib</span><br></pre></td></tr></table></figure>
-<p>然后执行命令: ldconfig</p>
-<h3 id="opencv"><a href="#opencv" class="headerlink" title="opencv"></a>opencv</h3><p>详细安装过程参考另一篇博客。</p>
-<h2 id="3-安装ncnn"><a href="#3-安装ncnn" class="headerlink" title="3.安装ncnn"></a>3.安装ncnn</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ cd &lt;ncnn-root-dir&gt;</span><br><span class="line">$ mkdir -p build</span><br><span class="line">$ cd build</span><br><span class="line"></span><br><span class="line">$ cmake -DNCNN_VULKAN=OFF ..</span><br><span class="line"></span><br><span class="line">$ make -j4</span><br></pre></td></tr></table></figure>
+      <h2 id="1-下载"><a href="#1-下载" class="headerlink" title="1.下载"></a>1.下载</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone --recursive https://github.com/dmlc/tvm</span><br></pre></td></tr></table></figure>
+<p>最好使用<code>--recursive</code>选项，不然会缺一些库</p>
+<h2 id="2-环境准备"><a href="#2-环境准备" class="headerlink" title="2.环境准备"></a>2.环境准备</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install -y python python-dev python-setuptools gcc libtinfo-dev zlib1g-dev python3 python3-pip</span><br></pre></td></tr></table></figure>
+<p>python2不支持tvm 一定要用python3.5以上的版本，并且使用pip安装一些包 指定pip源以加速</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install numpy decorator attrs -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
+<p>在安装tvm之前还需要安装LLVM4.0以上的版本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget -c http://releases.llvm.org/6.0.1/clang+llvm-6.0.1-x86_64-linux-gnu-ubuntu-16.04.tar.xz</span><br><span class="line">tar xJvf clang+llvm-6.0.1-x86_64-linux-gnu-ubuntu-16.04.tar.xz</span><br></pre></td></tr></table></figure>
+<p>先在<code>~/.bashrc</code>文件尾添加环境</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PATH=$PATH:/root/clang+llvm-6.0.1-x86_64-linux-gnu-ubuntu-16.04/bin</span><br></pre></td></tr></table></figure>
+<p>然后执行<code>source ~/.bashrc</code>生效，最后执行<code>clang</code>得到如下输出说明LLVM安装成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang-6.0: error: no input files</span><br></pre></td></tr></table></figure>
+<h2 id="3-安装"><a href="#3-安装" class="headerlink" title="3.安装"></a>3.安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir build</span><br><span class="line">cp cmake/config.cmake build</span><br></pre></td></tr></table></figure>
+<p>修改build/config.cmake文件，将<code>set(USE_LLVM OFF)</code>选项改为<code>set(USE_LLVM ON)</code>，来启用LLVM。</p>
+<p>然后构建tvm和相关库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd build</span><br><span class="line">cmake ..</span><br><span class="line">make -j4</span><br></pre></td></tr></table></figure>
+<h2 id="4-测试"><a href="#4-测试" class="headerlink" title="4.测试"></a>4.测试</h2><p>先在<code>~/.bashrc</code>文件尾添加环境</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export TVM_PATH=path/to/tvm</span><br><span class="line">export PYTHONPATH=$TVM_PATH/python:$TVM_PATH/topi/python:$TVM_PATH/nnvm/python:$&#123;PYTHONPATH&#125;</span><br></pre></td></tr></table></figure>
+<p>然后执行<code>source ~/.bashrc</code>生效，使用python3执行<code>import tvm</code>成功即可。</p>
 
     
   </div>
@@ -234,10 +243,10 @@ ga('send', 'pageview');
 
    
   <div class="box-prev-next clearfix">
-    <a class="show pull-left" href="/2019/09/14/在树莓派上安装ncnn/">
+    <a class="show pull-left" href="/2019/09/14/在树莓派上安装和运行tvm/">
         <i class="icon icon-angle-left"></i>
     </a>
-    <a class="show pull-right" href="/2019/09/14/在android上安装和运行tvm/">
+    <a class="hide pull-right" href="/">
         <i class="icon icon-angle-right"></i>
     </a>
   </div>

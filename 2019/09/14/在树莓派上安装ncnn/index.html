@@ -7,7 +7,7 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>David Lau</title>
+  <title>在树莓派上安装和运行ncnn | David Lau</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -15,17 +15,17 @@
     <meta name="keywords" content="linux,python,Django,backend">
   
 
-  <meta name="description" content="title:在树莓派上安装和运行ncnn1. 下载12git clone https://github.com/Tencent/ncnn.gitcd ncnn 2. 安装依赖安装cmake和g++12apt install g++apt install cmake 安装protobuf1234sudo apt-get install -y gfortransudo apt-get install">
+  <meta name="description" content="1. 下载12git clone https://github.com/Tencent/ncnn.gitcd ncnn 2. 安装依赖安装cmake和g++12apt install g++apt install cmake 安装protobuf1234sudo apt-get install -y gfortransudo apt-get install -y libprotobuf-dev l">
 <meta property="og:type" content="article">
-<meta property="og:title" content="David Lau">
+<meta property="og:title" content="在树莓派上安装和运行ncnn">
 <meta property="og:url" content="http://yoursite.com/2019/09/14/在树莓派上安装ncnn/index.html">
 <meta property="og:site_name" content="David Lau">
-<meta property="og:description" content="title:在树莓派上安装和运行ncnn1. 下载12git clone https://github.com/Tencent/ncnn.gitcd ncnn 2. 安装依赖安装cmake和g++12apt install g++apt install cmake 安装protobuf1234sudo apt-get install -y gfortransudo apt-get install">
+<meta property="og:description" content="1. 下载12git clone https://github.com/Tencent/ncnn.gitcd ncnn 2. 安装依赖安装cmake和g++12apt install g++apt install cmake 安装protobuf1234sudo apt-get install -y gfortransudo apt-get install -y libprotobuf-dev l">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-09-14T14:16:13.476Z">
+<meta property="og:updated_time" content="2019-09-14T14:21:33.939Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="David Lau">
-<meta name="twitter:description" content="title:在树莓派上安装和运行ncnn1. 下载12git clone https://github.com/Tencent/ncnn.gitcd ncnn 2. 安装依赖安装cmake和g++12apt install g++apt install cmake 安装protobuf1234sudo apt-get install -y gfortransudo apt-get install">
+<meta name="twitter:title" content="在树莓派上安装和运行ncnn">
+<meta name="twitter:description" content="1. 下载12git clone https://github.com/Tencent/ncnn.gitcd ncnn 2. 安装依赖安装cmake和g++12apt install g++apt install cmake 安装protobuf1234sudo apt-get install -y gfortransudo apt-get install -y libprotobuf-dev l">
 
   
 
@@ -154,7 +154,7 @@ ga('send', 'pageview');
 
   <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#title-在树莓派上安装和运行ncnn"><span class="toc-text">title:在树莓派上安装和运行ncnn</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-下载"><span class="toc-text">1. 下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-安装依赖"><span class="toc-text">2. 安装依赖</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装cmake和g"><span class="toc-text">安装cmake和g++</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装protobuf"><span class="toc-text">安装protobuf</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-安装ncnn"><span class="toc-text">3. 安装ncnn</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-运行benchmark"><span class="toc-text">4. 运行benchmark</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-下载"><span class="toc-text">1. 下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-安装依赖"><span class="toc-text">2. 安装依赖</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装cmake和g"><span class="toc-text">安装cmake和g++</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装protobuf"><span class="toc-text">安装protobuf</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-安装ncnn"><span class="toc-text">3. 安装ncnn</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-运行benchmark"><span class="toc-text">4. 运行benchmark</span></a></li></ol>
   </div>
 
 
@@ -162,7 +162,7 @@ ga('send', 'pageview');
 <div class="content content-post CENTER">
    <article id="post-在树莓派上安装ncnn" class="article article-type-post" itemprop="blogPost">
   <header class="article-header">
-    <h1 class="post-title">(no title)</h1>
+    <h1 class="post-title">在树莓派上安装和运行ncnn</h1>
 
     <div class="article-meta">
       <span>
@@ -195,8 +195,7 @@ ga('send', 'pageview');
 
   <div class="article-content">
     
-      <hr>
-<h2 id="title-在树莓派上安装和运行ncnn"><a href="#title-在树莓派上安装和运行ncnn" class="headerlink" title="title:在树莓派上安装和运行ncnn"></a>title:在树莓派上安装和运行ncnn</h2><h2 id="1-下载"><a href="#1-下载" class="headerlink" title="1. 下载"></a>1. 下载</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/Tencent/ncnn.git</span><br><span class="line">cd ncnn</span><br></pre></td></tr></table></figure>
+      <h2 id="1-下载"><a href="#1-下载" class="headerlink" title="1. 下载"></a>1. 下载</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/Tencent/ncnn.git</span><br><span class="line">cd ncnn</span><br></pre></td></tr></table></figure>
 <h2 id="2-安装依赖"><a href="#2-安装依赖" class="headerlink" title="2. 安装依赖"></a>2. 安装依赖</h2><h3 id="安装cmake和g"><a href="#安装cmake和g" class="headerlink" title="安装cmake和g++"></a>安装cmake和g++</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt install g++</span><br><span class="line">apt install cmake</span><br></pre></td></tr></table></figure>
 <h3 id="安装protobuf"><a href="#安装protobuf" class="headerlink" title="安装protobuf"></a>安装protobuf</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install -y gfortran</span><br><span class="line">sudo apt-get install -y libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler</span><br><span class="line">sudo apt-get install --no-install-recommends libboost-all-dev</span><br><span class="line">sudo apt-get install -y libgflags-dev libgoogle-glog-dev liblmdb-dev libatlas-base-dev</span><br></pre></td></tr></table></figure>
 <p>直接从源码编译容易产生一些问题，通过上面的命令可以直接安装预编译的版本。</p>
